@@ -16,17 +16,19 @@ export default function ProductGrid({ products, setId, onInteraction }) {
   }
 
   return (
-    <div className="flex overflow-x-auto gap-6 pb-12 pt-4 px-2 -mx-2 hide-scrollbar snap-x snap-mandatory relative scroll-smooth">
-      <div className="absolute right-0 top-0 bottom-12 w-32 bg-gradient-to-l from-white to-transparent pointer-events-none z-10 hidden md:block"></div>
-      {products.map((product) => (
-        <div key={product.id} className="snap-start shrink-0">
-          <ProductCard
-            product={product}
-            setId={setId}
-            onInteraction={onInteraction}
-          />
-        </div>
-      ))}
+    <div className="relative">
+      <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-white to-transparent pointer-events-none z-10 hidden md:block"></div>
+      <div className="flex overflow-x-auto gap-6 pb-8 pt-4 hide-scrollbar snap-x snap-mandatory scroll-smooth">
+        {products.map((product) => (
+          <div key={product.id} className="snap-start shrink-0">
+            <ProductCard
+              product={product}
+              setId={setId}
+              onInteraction={onInteraction}
+            />
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

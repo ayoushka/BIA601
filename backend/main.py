@@ -150,6 +150,62 @@ async def init_generation(user_id: int):
         "population": sets
     }
 
+@app.get("/recommend/{user_id}")
+async def get_final_recommendations(user_id: int):
+    """ Internal GA: Runs 5 generations to find the best 5 products for the user """
+    profile = get_user_profile(user_id)
+    product_pool = products_df['product_id'].tolist()
+    
+    # 1. Initialize Population (5 chromosomes, each has 5 product genes)
+    population = [random.sample(product_pool, 5) for _ in range(5)]
+    
+    for gen in range(5):
+        # 2. Evaluate Fitness for each chromosome (sum of individual product fitness)
+        scored_population = []
+        for chromo in population:
+            # We use our fitness function logic on each product
+            fitness_sum = sum([generate_rich_product_card(p, user_id, False, profile['country'])['fitnessScore'] for p in chromo])
+            scored_population.append((fitness_sum, chromo))
+            
+        # 3. Selection: Keep top 2
+        scored_population.sort(key=lambda x: x[0], reverse=True)
+        parent1 = scored_population[0][1]
+        parent2 = scored_population[1][1]
+        
+        # 4. Crossover & Mutation
+        next_gen = [parent1, parent2]
+        for _ in range(3):
+            # Crossover
+            split = random.randint(1, 4)
+            child = list(set(parent1[:split] + parent2[split:]))
+            # Fill if too short
+            while len(child) < 5:
+                child.append(random.choice(product_pool))
+            # Mutation (10% chance)
+            if random.random() < 0.1:
+                child[random.randint(0, 4)] = random.choice(product_pool)
+            
+            next_gen.append(child[:5])
+        
+        population = next_gen
+        
+    # Final evaluation to pick the absolute best
+    scored_population = []
+    for chromo in population:
+        fitness_sum = sum([generate_rich_product_card(p, user_id, False, profile['country'])['fitnessScore'] for p in chromo])
+        scored_population.append((fitness_sum, chromo))
+    scored_population.sort(key=lambda x: x[0], reverse=True)
+    best_chromosome = scored_population[0][1]
+    
+    # Generate rich cards for the best list
+    best_products = [generate_rich_product_card(pid, user_id, False, profile['country']) for pid in best_chromosome]
+    
+    return {
+        "user_profile": profile,
+        "recommendations": best_products
+    }
+
+
 class SetFitness(BaseModel):
     setId: str
     fitness: float

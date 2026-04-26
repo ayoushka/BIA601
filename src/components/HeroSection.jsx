@@ -15,7 +15,7 @@ export default function HeroSection() {
             <span>Gen 4.2 Algorithm Currently Active</span>
           </div>
           <h2 className="text-4xl md:text-5xl lg:text-7xl font-extrabold tracking-tight mb-6 leading-tight">
-            Evolutionary AI <br />
+            Genetic Algorithm <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-amber-600">
               Recommendations
             </span>
@@ -23,15 +23,6 @@ export default function HeroSection() {
           <p className="text-base sm:text-lg md:text-xl text-slate-300 max-w-2xl leading-relaxed mb-10 mx-auto md:mx-0">
             We don't just filter products. We use genetic algorithms to evolve lists based on your unique behavior. Survival of the fittest means only the perfect match makes it to your screen.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-            <button className="px-8 py-3.5 rounded-xl bg-brand-gold hover:bg-amber-500 text-[#0f172a] font-bold shadow-lg shadow-brand-gold/25 transition-all active:scale-95 flex items-center justify-center gap-2">
-              <span>Explore My Timeline</span>
-            </button>
-            <button className="px-8 py-3.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white font-semibold backdrop-blur transition-all active:scale-95 flex items-center justify-center gap-2">
-              <Dna size={18} />
-              <span>Refine DNA Profile</span>
-            </button>
-          </div>
         </div>
         
         <div className="hidden lg:flex flex-1 justify-end perspective-[1000px]">
