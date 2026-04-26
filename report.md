@@ -41,8 +41,8 @@ Unlike traditional systems that rely on direct sorting, this system simulates th
 
 ## 4. Key Features
 *   **User DNA Awareness**: Recommendations change radically and dynamically when switching between different users (e.g., a 20-year-old user in one country vs. a 50-year-old in another).
-*   **Social Proofing**: Live badges like "🔥 Trending in [City Name]" are integrated by cross-referencing behavior data with user locations.
-*   **Visual Evolution**: The system provides an interface showing the "generation evolution" state 🧬, allowing the user to see how recommendations improve based on their interactions (clicks, cart additions) as it transitions from the first generation to subsequent ones.
+*   **Social Proofing**: Live badges like "Trending in [City Name]" are integrated by cross-referencing behavior data with user locations.
+*   **Visual Evolution**: The system provides an interface showing the "generation evolution" state, allowing the user to see how recommendations improve based on their interactions (clicks, cart additions) as it transitions from the first generation to subsequent ones.
 
 ## Conclusion
 The project successfully transformed a complex research concept about genetic algorithms into a fully integrated web application. Real data was used to guide recommendations to be relevant, logical, and highly purchasable, with all steps documented and displayed in an interactive, modern manner.
