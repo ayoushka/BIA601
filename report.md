@@ -1,48 +1,48 @@
-# تقرير مشروع الخوارزميات الذكية: تحسين التوصيات في المتاجر الإلكترونية باستخدام الخوارزميات الجينية
+# Intelligence Algorithm Project Report: Optimizing E-commerce Recommendations using Genetic Algorithms
 
-## 1. المقدمة والمرجع العلمي
-يستند هذا المشروع إلى أحدث الأبحاث في مجال الذكاء التطوري لتطوير أنظمة التوصية في التجارة الإلكترونية. يعتمد النهج الأساسي على المقال العلمي التالي:
+## 1. Introduction and Scientific Reference
+This project is based on the latest research in the field of evolutionary intelligence to develop recommendation systems in e-commerce. The fundamental approach is derived from the following scientific article:
 
 > **Deshmukh, et al. (2024). "Customer behavioural content recommendation system using decision tree and genetic algorithm for online shopping websites". Multidisciplinary Science Journal.**
 
-ينتقل التنفيذ في هذا المشروع من أساليب التصفية الثابتة (Static Filtering) إلى نهج تطوري ديناميكي، حيث يتم التعامل مع مجموعات التوصية كـ "كروموسومات" (Chromosomes) تتطور بناءً على الحمض النووي (DNA) للمستخدم في الوقت الفعلي (مثل العمر والموقع) وسجل تفاعلاته مع المنتجات.
+The implementation in this project shifts from static filtering methods to a dynamic evolutionary approach, where recommendation sets are treated as "Chromosomes" that evolve based on the user's DNA in real-time (such as age and location) and their interaction history with products.
 
-## 2. مجموعة البيانات والتقنيات المستخدمة
-تم بناء النظام واختباره باستخدام مجموعة البيانات الرسمية الخاصة بالجامعة، والتي تتكون من أربعة ملفات مترابطة تعطي صورة كاملة عن سلوك المستخدم والمنتجات:
-*   **ملف المستخدمين (`users.xlsx`)**: يحتوي على بيانات 1000 مستخدم، بما في ذلك العمر والبلد، لبناء الملف التعريفي الأساسي (User DNA).
-*   **ملف المنتجات (`products.xlsx`)**: يحتوي على بيانات 5000 منتج وتصنيفاتها وأسعارها.
-*   **ملف التقييمات (`ratings.xlsx`)**: يضم 5000 تقييم صريح من المستخدمين للمنتجات.
-*   **ملف السلوك (`behavior_15500.xlsx`)**: يتضمن 13500 سجل لتفاعلات المستخدمين الفعلية (المشاهدة، النقر، والشراء).
+## 2. Dataset and Technologies Used
+The system was built and tested using the university's official dataset, which consists of four interconnected files providing a complete picture of user behavior and products:
+*   **Users File (`users.xlsx`)**: Contains data for 1000 users, including age and country, to build the core User DNA.
+*   **Products File (`products.xlsx`)**: Contains data for 5000 products, their categories, and prices.
+*   **Ratings File (`ratings.xlsx`)**: Includes 5000 explicit user ratings for products.
+*   **Behavior File (`behavior_15500.xlsx`)**: Contains 13,500 records of actual user interactions (views, clicks, and purchases).
 
-### التقنيات المستخدمة:
-*   **الواجهة الأمامية (Frontend)**: تم بناؤها باستخدام React (Vite) مع واجهة مستخدم تطورية مخصصة (Evolutionary UI) لتحديث الأجيال وعرض التوصيات في الوقت الفعلي.
-*   **الواجهة الخلفية (Backend)**: تم استخدام Python مع إطار عمل (FastAPI) لضمان سرعة العمليات الحسابية الجينية.
-*   **محرك البيانات (Data Engine)**: تم استخدام مكتبة Pandas لدمج وتحليل الملفات الأربعة وتحويلها إلى بيانات مفهومة للخوارزمية.
+### Technologies Used:
+*   **Frontend**: Built using React (Vite) with a custom Evolutionary UI to update generations and display recommendations in real-time.
+*   **Backend**: Python was used with the FastAPI framework to ensure high-speed genetic computations.
+*   **Data Engine**: The Pandas library was used to merge and analyze the four files, converting them into a format understandable by the algorithm.
 
-## 3. الخوارزمية الجينية للتوصيات
-على عكس الأنظمة التقليدية التي تعتمد على الفرز المباشر، يحاكي هذا النظام عملية الانتقاء الطبيعي (Natural Selection) للوصول إلى أفضل قائمة منتجات تناسب اهتمامات المستخدم الفردي.
+## 3. The Genetic Algorithm for Recommendations
+Unlike traditional systems that rely on direct sorting, this system simulates the process of Natural Selection to arrive at the best product list that suits an individual user's interests.
 
-### أ. التمثيل البيولوجي (Biological Mapping)
-*   **المجتمع (Population)**: يتكون من عدة مجموعات من قوائم التوصيات (مثلاً: المجموعة Alpha، Beta، Gamma).
-*   **الكروموسوم (Chromosome)**: يمثل قائمة واحدة تتكون من 5 منتجات مقترحة ومخصصة لمعرف مستخدم معين (`user_id`).
-*   **دالة الصلاحية أو جودة الحل (Fitness Function)**: هي المقياس الأساسي لـ "بقاء" القائمة أو استبعادها. قمنا بتحويل السلوك والتفاعل إلى قيم رقمية دقيقة:
-    *   إذا كان المنتج قد تم شراؤه مسبقاً في فئة معينة، يُعطى وزناً عالياً (x10).
-    *   إذا كان المنتج قد تم النقر عليه، يُعطى وزناً متوسطاً (x5).
-    *   إذا تم مشاهدته فقط، يُعطى وزناً أقل (x1).
-    *   تتم إضافة متوسط التقييم (Avg_Rating) لضمان جودة المنتج بشكل عام.
+### A. Biological Mapping
+*   **Population**: Consists of multiple groups of recommendation lists (e.g., Alpha, Beta, Gamma).
+*   **Chromosome**: Represents a single list consisting of 5 suggested products customized for a specific `user_id`.
+*   **Fitness Function (Solution Quality)**: This is the primary metric for the "survival" or exclusion of a list. We converted behavior and interaction into precise numerical values:
+    *   If the product was previously purchased in a specific category, it is given a high weight (x10).
+    *   If the product was clicked, it is given a medium weight (x5).
+    *   If it was only viewed, it is given a lower weight (x1).
+    *   The Average Rating (`Avg_Rating`) is added to ensure overall product quality.
 
-> المعادلة المستخدمة للحساب:
+> Calculation Formula:
 > `Fitness = (Purchased × 10) + (Clicked × 5) + (Viewed × 1) + Avg_Rating`
 
-### ب. مراحل التطور في التنفيذ (Evolutionary Phases)
-1.  **الاختيار (Selection)**: يقوم النظام بتحديد أفضل مجموعات المنتجات التي حققت أعلى درجة (Fitness Score) وتتناسب مع العمر والبلد الخاص بالمستخدم.
-2.  **التزاوج أو الدمج (Crossover)**: يتم أخذ أفضل المنتجات من القوائم الجيدة (مثلاً 3 منتجات من قائمة و 2 من قائمة أخرى) لإنشاء "جيل جديد" أكثر تنوعاً وقوة.
-3.  **الطفرة (Mutation - محرك الاستكشاف)**: لتجنب مشكلة الانعزال في المنتجات المفضلة فقط (Local Optimum)، يتدخل محرك الطفرة؛ فعندما يرفض المستخدم منتجاً، يقوم النظام بضخ منتج عالي الجودة لم يشاهده المستخدم من قبل لإعطاء تنوع للقائمة النهائية.
+### B. Evolutionary Phases in Execution
+1.  **Selection**: The system selects the best product groups that achieved the highest Fitness Score and match the user's age and country.
+2.  **Crossover**: The best products from good lists are taken (e.g., 3 products from one list and 2 from another) to create a stronger, more diverse "new generation".
+3.  **Mutation (Exploration Engine)**: To avoid the problem of getting stuck in only favorite products (Local Optimum), the mutation engine intervenes. When a user rejects a product, the system injects a high-quality product the user hasn't seen before to add diversity to the final list.
 
-## 4. الميزات الرئيسية للمشروع (Key Features)
-*   **الوعي بملف المستخدم (User DNA Awareness)**: تتغير التوصيات جذرياً وبشكل ديناميكي عند التبديل بين مستخدمين مختلفين (مثلاً مستخدم عمره 20 عاماً في دولة معينة مقابل مستخدم عمره 50 عاماً في دولة أخرى).
-*   **الدليل الاجتماعي (Social Proofing)**: تم دمج نظام الشارات الحية مثل "🔥 شائع في [اسم المدينة]" عن طريق مقاطعة بيانات السلوك مع مواقع المستخدمين.
-*   **التطور المرئي (Visual Evolution)**: يتيح النظام واجهة تُظهر حالة "تطور الجيل" 🧬 حيث يرى المستخدم كيفية تحسن التوصيات بناءً على تفاعله (النقر، إضافات السلة) والانتقال من الجيل الأول للأجيال اللاحقة.
+## 4. Key Features
+*   **User DNA Awareness**: Recommendations change radically and dynamically when switching between different users (e.g., a 20-year-old user in one country vs. a 50-year-old in another).
+*   **Social Proofing**: Live badges like "🔥 Trending in [City Name]" are integrated by cross-referencing behavior data with user locations.
+*   **Visual Evolution**: The system provides an interface showing the "generation evolution" state 🧬, allowing the user to see how recommendations improve based on their interactions (clicks, cart additions) as it transitions from the first generation to subsequent ones.
 
-## الخلاصة
-لقد نجح المشروع في تحويل فكرة بحثية معقدة حول الخوارزميات الجينية إلى تطبيق ويب متكامل. تم استخدام بيانات حقيقية لتوجيه التوصيات بحيث تكون ذات صلة ومنطقية وأكثر قابلية للشراء، مع توثيق كافة الخطوات وعرضها بأسلوب تفاعلي وحديث.
+## Conclusion
+The project successfully transformed a complex research concept about genetic algorithms into a fully integrated web application. Real data was used to guide recommendations to be relevant, logical, and highly purchasable, with all steps documented and displayed in an interactive, modern manner.
