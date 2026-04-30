@@ -17,6 +17,7 @@ const DUMMY_IMAGES = [
 ];
 
 function App() {
+  // creating all our state variables to keep track of the page and data
   const [activePage, setActivePage] = useState('recommendations');
   const [activeUserId, setActiveUserId] = useState(141);
   
@@ -31,6 +32,7 @@ function App() {
 
   // Init Recommendations
   useEffect(() => {
+    // getting the recommended products from our python backend api
     const fetchRecommendations = async () => {
       try {
         setLoading(true);
@@ -60,6 +62,7 @@ function App() {
   }, [activePage, activeUserId]);
 
   const handleInteraction = useCallback(async (setId, type, actionProduct) => {
+      // handling what happens when a user clicks buttons like add to cart or skip
       if (type === 'pass') {
           try {
              const response = await fetch(`http://localhost:8000/mutate/${activeUserId}`);
@@ -108,6 +111,7 @@ function App() {
   const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   const renderPage = () => {
+    // deciding which page to show on the screen
     switch (activePage) {
       case 'data-dna': return <DataDNAPage />;
       case 'settings': return <SettingsPage />;

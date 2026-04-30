@@ -1,5 +1,6 @@
 import { Activity, BrainCircuit, RefreshCw, AlertTriangle, Fingerprint, MousePointerClick, Eye, ShoppingCart } from 'lucide-react';
 
+// this widget shows the user's history and behavior on the side
 export default function UserBehaviorWidget({ rejectedCount, dna }) {
   if (!dna) return null;
 

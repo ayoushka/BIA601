@@ -1,5 +1,6 @@
 import ProductCard from './ProductCard';
 
+// this holds all the product cards in a nice scrolling list
 export default function ProductGrid({ products, setId, onInteraction }) {
   if (products.length === 0) {
     return (

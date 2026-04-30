@@ -25,6 +25,7 @@ const stats = [
   { label: 'Mutations Explored', value: '14', change: '-3%', up: false },
 ];
 
+// this is the page that shows the user their behavior stats like dna traits
 export default function DataDNAPage() {
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-12 py-10">

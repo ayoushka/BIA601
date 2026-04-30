@@ -6,6 +6,7 @@ from typing import List, Dict, Any
 import numpy as np
 from pydantic import BaseModel
 
+# setting up the main app for the api
 app = FastAPI()
 
 app.add_middleware(
@@ -16,6 +17,7 @@ app.add_middleware(
 )
 
 try:
+    # loading all our data from excel files
     users_df = pd.read_excel('users.xlsx')
     products_df = pd.read_excel('products.xlsx')
     behavior_df = pd.read_excel('behavior_15500.xlsx')
@@ -32,6 +34,7 @@ except Exception as e:
 
 
 def generate_rich_product_card(pid, user_id=None, force_mutation=False, target_location="Unknown"):
+    # calculating the product score based on purchases, clicks and views
     # Target Academic Formula: (Purchased x10, Clicked x5, Viewed x1) + Average Rating
     global_purchases = behavior_df[behavior_df['product_id'] == pid]['purchased'].sum()
     global_clicks = behavior_df[behavior_df['product_id'] == pid]['clicked'].sum()
@@ -75,6 +78,7 @@ def generate_rich_product_card(pid, user_id=None, force_mutation=False, target_l
     }
 
 def get_user_profile(user_id):
+    # getting the user information and what they like to buy
     user_data = users_df[users_df['user_id'] == user_id]
     if user_data.empty:
         user_id = int(users_df['user_id'].iloc[0])
@@ -120,6 +124,7 @@ def get_user_profile(user_id):
 @app.get("/users")
 async def get_users_list():
     """ Provides dynamic user selection for Login Simulation UI """
+    # getting a list of all users from the data
     # Include all distinct users as requested
     sample = users_df.drop_duplicates(subset=['user_id'])
     users_list = []
@@ -134,6 +139,7 @@ async def get_users_list():
 @app.get("/generation/init/{user_id}")
 async def init_generation(user_id: int):
     """ Initialize Generation 1 mapping 3 Sets of Chromosomes (recommendations) """
+    # starting the first generation of products for the user
     profile = get_user_profile(user_id)
     product_pool = products_df['product_id'].tolist()
     
@@ -153,6 +159,7 @@ async def init_generation(user_id: int):
 @app.get("/recommend/{user_id}")
 async def get_final_recommendations(user_id: int):
     """ Internal GA: Runs 5 generations to find the best 5 products for the user """
+    # running the genetic algorithm to find the absolute best products
     profile = get_user_profile(user_id)
     product_pool = products_df['product_id'].tolist()
     
@@ -218,6 +225,7 @@ class EvolutionRequest(BaseModel):
 
 @app.post("/generation/evolve")
 async def evolve_generation(request: EvolutionRequest):
+    # creating the next generation by mixing the best products together
     profile = get_user_profile(request.user_id)
     product_pool = products_df['product_id'].tolist()
     
@@ -252,6 +260,7 @@ async def evolve_generation(request: EvolutionRequest):
 @app.get("/mutate/{user_id}")
 async def dynamic_card_mutation(user_id: int):
     """ Academic exclusion: Provides a single mutated product that the active user HAS NEVER VIEWED BEFORE """
+    # getting a random new product that the user has never seen before
     profile = get_user_profile(user_id)
     
     # Exclusion Protocol

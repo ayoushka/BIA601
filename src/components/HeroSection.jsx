@@ -1,5 +1,6 @@
 import { Dna, Zap } from 'lucide-react';
 
+// this is the big introduction banner at the top of the page
 export default function HeroSection() {
   return (
     <section className="relative overflow-hidden bg-[#0f172a] text-white py-16 sm:py-24">

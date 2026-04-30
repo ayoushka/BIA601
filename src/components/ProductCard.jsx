@@ -1,6 +1,7 @@
 import { Sparkles, X, ShoppingCart, Check, Star, Eye, Flame, CreditCard } from 'lucide-react';
 import { useState } from 'react';
 
+// this shows a single product with its picture, price and buttons
 export default function ProductCard({ product, setId, onInteraction }) {
   const [isEvolving, setIsEvolving] = useState(false);
   const [justAdded, setJustAdded] = useState(false);
@@ -8,6 +9,7 @@ export default function ProductCard({ product, setId, onInteraction }) {
 
   const handleRemove = () => {
     setIsEvolving(true);
+    // wait a little bit to show a loading animation before removing
     // Academic Requirement: Wait 1.5s to show mutation loading state visually
     setTimeout(() => {
       onInteraction(setId, 'pass', product);
@@ -15,6 +17,7 @@ export default function ProductCard({ product, setId, onInteraction }) {
   };
 
   const handleAddToCart = () => {
+    // add the item to the cart and show a checkmark temporarily
     setJustAdded(true);
     onInteraction(setId, 'cart', product);
     setTimeout(() => setJustAdded(false), 1200);

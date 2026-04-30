@@ -21,6 +21,7 @@ const Toggle = ({ enabled, onToggle, label, description }) => (
   </div>
 );
 
+// this is the settings page where the user can change their preferences
 export default function SettingsPage() {
   const [saved, setSaved] = useState(false);
   const [settings, setSettings] = useState({

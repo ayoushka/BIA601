@@ -1,6 +1,7 @@
 import { User, ChevronDown } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
+// this is the top menu bar of the website where you can switch users
 export default function Header({ activePage, onNavigate, userProfile, activeUserId, onUserSwitch }) {
   const [usersList, setUsersList] = useState([]);
 

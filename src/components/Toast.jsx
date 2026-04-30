@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Check, X } from 'lucide-react';
 
+// this is the small popup message that appears at the bottom of the screen
 export default function Toast({ message, isVisible, onClose, type = 'success' }) {
   const [show, setShow] = useState(false);
 

@@ -1,5 +1,6 @@
 import { X, ShoppingCart, Trash2, Plus, Minus } from 'lucide-react';
 
+// this part shows the shopping cart menu on the right side
 export default function CartSidebar({ isOpen, onClose, cartItems, onUpdateQuantity, onRemoveItem }) {
   const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
