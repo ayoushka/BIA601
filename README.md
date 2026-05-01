@@ -3,7 +3,7 @@
 
 > مشروع BIA601 – الخوارزميات الذكية | الفصل الدراسي S25
 
-[![GitHub repo](https://img.shields.io/badge/GitHub-Repository-blue?logo=github)](رابط_الريبو)
+[![GitHub repo](https://github.com/ayoushka/BIA601)](رابط_الريبو)
 [![Demo](https://img.shields.io/badge/Demo-Live-green?logo=netlify)](رابط_الديمو)
 [![Video](https://img.shields.io/badge/Video-3%20minutes-red?logo=youtube)](رابط_الفيديو)
 
@@ -86,8 +86,8 @@ BIA601_Project/
 ### الخطوات
 
 1. **استنساخ المستودع**
-   ```bash
-   git clone https://github.com/your-username/BIA601_Project.git
+   في الـ CMD
+   git clone https://github.com/ayoushka/BIA601
    cd BIA601_Project
    
 ---
@@ -117,7 +117,7 @@ BIA601_Project/
 
 1. **استنساخ المستودع**
    نكتب الأمر التالي في CMD
-   git clone https://github.com/your-username/BIA601_Project.git
+   git clone https://github.com/ayoushka/BIA601.git
    cd BIA601_Project
 2. **اعداد البيئة الخلفية**
 نكتب في CMD
@@ -150,7 +150,7 @@ uvicorn main:app --reload
 2:20 – مقارنة النتائج قبل التحسين وبعده.
 2:45 – الخاتمة والروابط.
 **روابط المشروع**
-مستودع GitHub         رابط الريبو
+مستودع GitHub         الرابط https://github.com/ayoushka/BIA601
 واجهة API الحي         رابط API
 الواجهة (Netlify)      رابط الديمو
 رابط التقرير (PDF)       رابط التقرير
