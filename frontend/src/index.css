@@ -1,0 +1,22 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-blue: #0f172a; /* Slate 900 */
+  --color-brand-gold: #d97706; /* Amber 600 */
+  --color-brand-gold-light: #fbbf24; /* Amber 400 */
+}
+
+/* Base custom utilities */
+@utility glass-panel {
+  background-color: rgb(255 255 255 / 0.8);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgb(255 255 255 / 0.2);
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+@layer base {
+  body {
+    background-color: #f8fafc; /* Slate 50 */
+    color: #0f172a;
+  }
+}
