@@ -29,7 +29,7 @@ try:
         ratings_df = pd.DataFrame({'product_id': products_df['product_id'], 'rating': [random.uniform(3.5, 5.0) for _ in range(len(products_df))]})
     print("✅ تم تحميل جميع ملفات Excel بنجاح!")
 except Exception as e:
-    print(f"❌ خطأ فني: لم نتمكن من قراءة الملفات.")
+    print(f" خطأ فني: لم نتمكن من قراءة الملفات.")
     print(e)
 
 
