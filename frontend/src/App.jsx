@@ -36,7 +36,8 @@ function App() {
     const fetchRecommendations = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`http://localhost:8000/recommend/${activeUserId}`);
+        const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+        const response = await fetch(`${API_BASE_URL}/recommend/${activeUserId}`);
         if (!response.ok) throw new Error('Failed to fetch recommendations');
         
         const data = await response.json();
@@ -65,7 +66,8 @@ function App() {
       // handling what happens when a user clicks buttons like add to cart or skip
       if (type === 'pass') {
           try {
-             const response = await fetch(`http://localhost:8000/mutate/${activeUserId}`);
+             const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+             const response = await fetch(`${API_BASE_URL}/mutate/${activeUserId}`);
              if (!response.ok) throw new Error('Failed to mutate node');
              const mutatedItem = await response.json();
              

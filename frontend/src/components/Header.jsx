@@ -8,7 +8,8 @@ export default function Header({ activePage, onNavigate, userProfile, activeUser
   useEffect(() => {
     const fetchUsers = async () => {
        try {
-          const res = await fetch('http://localhost:8000/users');
+          const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+          const res = await fetch(`${API_BASE_URL}/users`);
           const data = await res.json();
           setUsersList(data.users || []);
        } catch(e) {}
