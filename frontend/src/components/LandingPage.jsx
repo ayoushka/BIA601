@@ -82,17 +82,12 @@ export default function LandingPage() {
           <div className="w-12 h-12 bg-amber-50 text-amber-500 rounded-2xl flex items-center justify-center mb-6">
             <BrainCircuit size={24} />
           </div>
-          <h3 className="text-2xl font-bold text-slate-900 mb-4">How Genetic Algorithms Work</h3>
-          <p className="text-slate-600 leading-relaxed mb-4">
-            Our recommendation engine is powered by a Genetic Algorithm that mimics natural selection:
+          <h3 className="text-2xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+            How Genetic Algorithms Work <Dna size={20} className="text-amber-500" />
+          </h3>
+          <p className="text-slate-600 leading-relaxed text-sm md:text-base text-justify">
+            A Genetic Algorithm (GA) is an optimization technique that mimics biological evolution to improve product recommendations in e-commerce. It starts with random lists of products (chromosomes) and evolves them step by step based on user behavior. The algorithm works through selection, crossover, and mutation. In each generation, the best performing recommendation lists (highest fitness) are chosen, combined, and slightly altered to create new lists. Over time, this cycle increases the chance of showing products the user is likely to buy. Genetic Algorithms are ideal for recommendation systems because they explore many combinations and adapt to individual preferences. By simulating evolution, our engine continuously refines product suggestions, turning clicks and purchases into smarter, personalized shopping experiences.
           </p>
-          <ul className="space-y-3 text-slate-600">
-            <li className="flex gap-2"><span className="font-bold text-amber-600">1. Initialization:</span> A diverse starting population of products is generated.</li>
-            <li className="flex gap-2"><span className="font-bold text-amber-600">2. Fitness Evaluation:</span> Each product is scored against the user's historical data and preferences.</li>
-            <li className="flex gap-2"><span className="font-bold text-amber-600">3. Selection:</span> The "fittest" products are selected to form a mating pool.</li>
-            <li className="flex gap-2"><span className="font-bold text-amber-600">4. Crossover & Mutation:</span> Product features are combined and slightly mutated to explore new potential matches.</li>
-            <li className="flex gap-2"><span className="font-bold text-amber-600">5. Convergence:</span> Over generations, the recommendations converge to the absolute best fit for the user.</li>
-          </ul>
         </div>
       </section>
     </div>

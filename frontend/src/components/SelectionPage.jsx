@@ -9,6 +9,7 @@ export default function SelectionPage({ activeUserId, onUserSwitch, setAlgorithm
   const userOptions = Array.from({ length: 1000 }, (_, i) => i + 1);
 
   const handleSelection = (algoType) => {
+    if (!activeUserId) return;
     setAlgorithmType(algoType);
     navigate('/store');
   };
@@ -35,6 +36,7 @@ export default function SelectionPage({ activeUserId, onUserSwitch, setAlgorithm
               onChange={(e) => onUserSwitch(Number(e.target.value))}
               className="block w-full pl-4 pr-10 py-4 text-base border-2 border-slate-200 focus:outline-none focus:ring-0 focus:border-amber-500 sm:text-lg rounded-2xl appearance-none bg-slate-50 font-semibold text-slate-800 transition-colors cursor-pointer"
             >
+              <option value="" disabled>Choose User Profile</option>
               {userOptions.map((id) => (
                 <option key={id} value={id}>
                   User #{id}
@@ -57,18 +59,20 @@ export default function SelectionPage({ activeUserId, onUserSwitch, setAlgorithm
             
             <button
               onClick={() => handleSelection('GA')}
-              className="flex flex-col items-center justify-center p-8 bg-white border-2 border-slate-200 rounded-2xl hover:border-amber-500 hover:bg-amber-50 group transition-all"
+              disabled={!activeUserId}
+              className={`flex flex-col items-center justify-center p-8 bg-white border-2 border-slate-200 rounded-2xl transition-all ${!activeUserId ? 'opacity-50 cursor-not-allowed' : 'hover:border-amber-500 hover:bg-amber-50 group'}`}
             >
-              <Activity size={40} className="text-slate-400 group-hover:text-amber-500 mb-4 transition-colors" />
+              <Activity size={40} className={`mb-4 transition-colors ${!activeUserId ? 'text-slate-300' : 'text-slate-400 group-hover:text-amber-500'}`} />
               <h3 className="text-xl font-bold text-slate-900 mb-2">GA</h3>
               <p className="text-sm text-slate-500 text-center font-medium">Genetic Algorithm</p>
             </button>
 
             <button
               onClick={() => handleSelection('NGA')}
-              className="flex flex-col items-center justify-center p-8 bg-white border-2 border-slate-200 rounded-2xl hover:border-blue-500 hover:bg-blue-50 group transition-all"
+              disabled={!activeUserId}
+              className={`flex flex-col items-center justify-center p-8 bg-white border-2 border-slate-200 rounded-2xl transition-all ${!activeUserId ? 'opacity-50 cursor-not-allowed' : 'hover:border-blue-500 hover:bg-blue-50 group'}`}
             >
-              <LayoutGrid size={40} className="text-slate-400 group-hover:text-blue-500 mb-4 transition-colors" />
+              <LayoutGrid size={40} className={`mb-4 transition-colors ${!activeUserId ? 'text-slate-300' : 'text-slate-400 group-hover:text-blue-500'}`} />
               <h3 className="text-xl font-bold text-slate-900 mb-2">NGA</h3>
               <p className="text-sm text-slate-500 text-center font-medium">Non-Genetic Baseline</p>
             </button>
