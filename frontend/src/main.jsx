@@ -4,8 +4,11 @@ import './index.css'
 import App from './App.jsx'
 
 // starting the react application and putting it in the root element
+import { BrowserRouter } from 'react-router-dom'
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <App />
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   </StrictMode>,
 )
