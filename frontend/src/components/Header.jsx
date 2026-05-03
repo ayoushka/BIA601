@@ -52,28 +52,7 @@ export default function Header({ userProfile, activeUserId, onUserSwitch }) {
         )}
 
         <div className="flex items-center gap-5 relative z-10">
-          {isLandingPage ? (
-            <Link to="/selection" className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold px-5 py-2.5 rounded-xl shadow-lg shadow-amber-500/20 transition-all">
-              Get Started <ArrowRight size={16} />
-            </Link>
-          ) : (
-            <div className="flex items-center pl-5 border-l border-slate-700">
-              <div className="relative group">
-                 <span className="absolute -top-5 right-1 text-[9px] uppercase tracking-widest text-[#0f172a] font-extrabold bg-amber-500 px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity">Swap User</span>
-                 <select 
-                    className="appearance-none bg-slate-800 border border-slate-600 text-white text-xs font-semibold rounded-lg pl-3 pr-8 py-2.5 hover:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 cursor-pointer transition-all max-w-[220px] shadow-sm truncate"
-                    value={activeUserId}
-                    onChange={(e) => onUserSwitch(Number(e.target.value))}
-                 >
-                    {usersList.length === 0 && <option value={activeUserId}>User #{activeUserId}</option>}
-                    {usersList.map(u => (
-                       <option key={u.id} value={u.id}>{u.display}</option>
-                    ))}
-                 </select>
-                 <ChevronDown size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none group-hover:text-amber-500" />
-              </div>
-            </div>
-          )}
+          {/* Right side actions removed per user request */}
         </div>
       </div>
     </header>

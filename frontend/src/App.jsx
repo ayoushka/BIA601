@@ -17,7 +17,7 @@ const DUMMY_IMAGES = [
 ];
 
 function App() {
-  const [activeUserId, setActiveUserId] = useState(141);
+  const [activeUserId, setActiveUserId] = useState('');
   const [algorithmType, setAlgorithmType] = useState('GA'); // 'GA' or 'NGA'
   
   // Recommendations State

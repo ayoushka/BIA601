@@ -1,4 +1,4 @@
-import { Dna, Zap, BookOpen, BrainCircuit, ArrowRight } from 'lucide-react';
+import { Dna, Zap, BookOpen, BrainCircuit, ArrowRight, GraduationCap } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export default function LandingPage() {
@@ -30,31 +30,31 @@ export default function LandingPage() {
               Get Started <ArrowRight size={20} />
             </Link>
           </div>
-          
+
           <div className="hidden lg:flex flex-1 justify-end perspective-[1000px]">
-             <div className="w-[400px] h-[400px] glass-panel bg-white/5 rounded-3xl p-6 border border-white/10 shadow-2xl relative rotate-[5deg] hover:rotate-[2deg] transition-all duration-700 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] hover:bg-white/10 cursor-default">
-                <div className="w-full h-full grid grid-cols-2 grid-rows-2 gap-4">
-                    <div className="bg-gradient-to-br from-amber-500/20 to-amber-500/5 rounded-2xl border border-amber-500/20 shadow-inner flex flex-col justify-end p-4">
-                        <div className="w-12 h-2 bg-amber-500/40 rounded-full mb-2"></div>
-                        <div className="w-20 h-2 bg-amber-500/20 rounded-full"></div>
-                    </div>
-                    <div className="bg-white/5 rounded-2xl border border-white/5 shadow-inner"></div>
-                    <div className="bg-white/5 rounded-2xl border border-white/5 shadow-inner flex items-center justify-center overflow-hidden">
-                       <div className="w-32 h-32 bg-amber-500/10 rounded-full blur-2xl"></div>
-                       <Dna size={48} className="text-amber-500/40 absolute drop-shadow-[0_0_15px_rgba(245,158,11,0.5)]" />
-                    </div>
-                    <div className="bg-gradient-to-tl from-[#0f172a] to-slate-800 rounded-2xl border border-white/5 shadow-inner p-4">
-                        <div className="flex gap-1 items-end h-full">
-                           {[40, 70, 45, 90, 60].map((h, i) => (
-                               <div key={i} className="w-full bg-slate-600 rounded-t-sm" style={{height: `${h}%`}}></div>
-                           ))}
-                        </div>
-                    </div>
+            <div className="w-[400px] h-[400px] glass-panel bg-white/5 rounded-3xl p-6 border border-white/10 shadow-2xl relative rotate-[5deg] hover:rotate-[2deg] transition-all duration-700 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] hover:bg-white/10 cursor-default">
+              <div className="w-full h-full grid grid-cols-2 grid-rows-2 gap-4">
+                <div className="bg-gradient-to-br from-amber-500/20 to-amber-500/5 rounded-2xl border border-amber-500/20 shadow-inner flex flex-col justify-end p-4">
+                  <div className="w-12 h-2 bg-amber-500/40 rounded-full mb-2"></div>
+                  <div className="w-20 h-2 bg-amber-500/20 rounded-full"></div>
                 </div>
-                <div className="absolute -top-4 -right-4 bg-brand-gold text-[#0f172a] text-xs font-bold px-3 py-1.5 rounded-full shadow-lg border-2 border-[#0f172a]">
-                    98% Confidence
+                <div className="bg-white/5 rounded-2xl border border-white/5 shadow-inner"></div>
+                <div className="bg-white/5 rounded-2xl border border-white/5 shadow-inner flex items-center justify-center overflow-hidden">
+                  <div className="w-32 h-32 bg-amber-500/10 rounded-full blur-2xl"></div>
+                  <Dna size={48} className="text-amber-500/40 absolute drop-shadow-[0_0_15px_rgba(245,158,11,0.5)]" />
                 </div>
-             </div>
+                <div className="bg-gradient-to-tl from-[#0f172a] to-slate-800 rounded-2xl border border-white/5 shadow-inner p-4">
+                  <div className="flex gap-1 items-end h-full">
+                    {[40, 70, 45, 90, 60].map((h, i) => (
+                      <div key={i} className="w-full bg-slate-600 rounded-t-sm" style={{ height: `${h}%` }}></div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <div className="absolute -top-4 -right-4 bg-brand-gold text-[#0f172a] text-xs font-bold px-3 py-1.5 rounded-full shadow-lg border-2 border-[#0f172a]">
+                98% Confidence
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -82,17 +82,54 @@ export default function LandingPage() {
           <div className="w-12 h-12 bg-amber-50 text-amber-500 rounded-2xl flex items-center justify-center mb-6">
             <BrainCircuit size={24} />
           </div>
-          <h3 className="text-2xl font-bold text-slate-900 mb-4">How Genetic Algorithms Work</h3>
-          <p className="text-slate-600 leading-relaxed mb-4">
-            Our recommendation engine is powered by a Genetic Algorithm that mimics natural selection:
+          <h3 className="text-2xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+            How Genetic Algorithms Work <Dna size={20} className="text-amber-500" />
+          </h3>
+          <p className="text-slate-600 leading-relaxed text-sm md:text-base text-justify">
+            A Genetic Algorithm (GA) is an optimization technique that mimics biological evolution to improve product recommendations in e-commerce. It starts with random lists of products (chromosomes) and evolves them step by step based on user behavior. The algorithm works through selection, crossover, and mutation. In each generation, the best performing recommendation lists (highest fitness) are chosen, combined, and slightly altered to create new lists. Over time, this cycle increases the chance of showing products the user is likely to buy. Genetic Algorithms are ideal for recommendation systems because they explore many combinations and adapt to individual preferences. By simulating evolution, our engine continuously refines product suggestions, turning clicks and purchases into smarter, personalized shopping experiences.
           </p>
-          <ul className="space-y-3 text-slate-600">
-            <li className="flex gap-2"><span className="font-bold text-amber-600">1. Initialization:</span> A diverse starting population of products is generated.</li>
-            <li className="flex gap-2"><span className="font-bold text-amber-600">2. Fitness Evaluation:</span> Each product is scored against the user's historical data and preferences.</li>
-            <li className="flex gap-2"><span className="font-bold text-amber-600">3. Selection:</span> The "fittest" products are selected to form a mating pool.</li>
-            <li className="flex gap-2"><span className="font-bold text-amber-600">4. Crossover & Mutation:</span> Product features are combined and slightly mutated to explore new potential matches.</li>
-            <li className="flex gap-2"><span className="font-bold text-amber-600">5. Convergence:</span> Over generations, the recommendations converge to the absolute best fit for the user.</li>
-          </ul>
+        </div>
+      </section>
+      {/* Project Team Section */}
+      <section className="bg-slate-900 py-16 border-t border-slate-800 relative z-10">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-12">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4 tracking-tight">Project Team</h2>
+            <div className="w-24 h-1.5 bg-gradient-to-r from-emerald-500 to-cyan-500 mx-auto rounded-full shadow-[0_0_10px_rgba(16,185,129,0.5)]"></div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            {[
+              { id: 1, name: 'محمد محمد بسام علايا', tag: 'mohammad_188524' },
+              { id: 2, name: 'آيـة عمر بلال', tag: 'aya_189191' },
+              { id: 3, name: 'ريم راتب عدس', tag: 'Reem_196911' },
+              { id: 4, name: 'نعمى عبد الله عبد الباقي', tag: 'nouma_153725' },
+              { id: 5, name: 'نور محمود الميلاجي', tag: 'nour_223981' },
+              { id: 6, name: 'مهند زياد شعار', tag: 'muhannad_al_shaar_202846' }
+            ].map((student, index) => (
+              <div
+                key={student.id}
+                className="group relative bg-slate-800/40 backdrop-blur-xl rounded-3xl p-6 border border-slate-700/50 shadow-xl hover:shadow-[0_0_30px_rgba(16,185,129,0.2)] hover:border-emerald-500/60 transform hover:scale-105 transition-all duration-300 animate-fade-in-up"
+                style={{ animationDelay: `${index * 150}ms`, animationFillMode: 'both' }}
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/0 to-cyan-500/0 group-hover:from-emerald-500/10 group-hover:to-cyan-500/10 rounded-3xl transition-colors duration-500 pointer-events-none"></div>
+
+                <div className="flex items-center justify-between mb-6 relative z-10">
+                  <div className="flex items-center gap-2 text-emerald-400 bg-emerald-500/10 px-3 py-1.5 rounded-lg border border-emerald-500/20">
+                    <GraduationCap size={18} />
+                    <span className="text-xs font-black tracking-widest uppercase">Student {student.id}</span>
+                  </div>
+                </div>
+
+                <div className="relative z-10 flex flex-col items-end gap-3 text-right">
+                  <h3 className="text-xl md:text-2xl font-bold text-white tracking-wide" dir="rtl">{student.name}</h3>
+                  <div className="bg-[#0f172a] px-4 py-2 rounded-xl border border-slate-700/50">
+                    <p className="text-xs font-mono text-cyan-400/90 tracking-wider">{student.tag}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
     </div>
