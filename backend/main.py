@@ -17,7 +17,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-BASE_DIR = Path(__file__).parent
+BASE_DIR = Path(__file__).resolve().parent
 
 try:
     # loading all our data from excel files
@@ -90,21 +90,21 @@ def get_user_profile(user_id):
     # getting the user information and what they like to buy
     user_data = users_df[users_df['user_id'] == user_id]
     if user_data.empty:
-        raise HTTPException(status_code=404, detail="User not found")
+        return {"error": f"User ID {user_id} not found in database."}
         
     user_history = behavior_df[behavior_df['user_id'] == user_id]
     total_purchases = int(user_history['purchased'].sum()) if not user_history.empty else 0
     total_clicks = int(user_history['clicked'].sum()) if not user_history.empty else 0
     total_views = int(user_history['viewed'].sum()) if not user_history.empty else 0
     
-    top_category = "Any"
-    behavior_data = [{"category": "Exploration", "percentage": 100, "color": "bg-slate-400"}]
+    top_category = "any"
+    behavior_data = [{"category": "exploration", "percentage": 100, "color": "bg-slate-400"}]
     
     if not user_history.empty:
         interacted_products = pd.merge(user_history, products_df, on='product_id')
         if not interacted_products.empty:
-            cat_counts = interacted_products['category'].value_counts()
-            top_category = str(cat_counts.idxmax()) if not cat_counts.empty else "Any"
+            cat_counts = interacted_products['category'].astype(str).str.strip().str.lower().value_counts()
+            top_category = str(cat_counts.idxmax()) if not cat_counts.empty else "any"
             
             total_interactions = len(interacted_products)
             colors = ['bg-blue-500', 'bg-emerald-500', 'bg-brand-gold', 'bg-rose-500']
@@ -149,10 +149,16 @@ async def init_generation(user_id: int):
     """ Initialize Generation 1 mapping 3 Sets of Chromosomes (recommendations) """
     # starting the first generation of products for the user
     profile = get_user_profile(user_id)
+    if "error" in profile: return profile
+    
     product_pool = products_df['product_id'].tolist()
     
     top_category = profile['dna']['top_category']
-    preferred_pool = products_df[products_df['category'] == top_category]['product_id'].tolist() if top_category != "Any" else product_pool
+    if top_category != "any":
+        preferred_pool = products_df[products_df['category'].astype(str).str.strip().str.lower() == top_category]['product_id'].tolist()
+    else:
+        preferred_pool = product_pool
+        
     if not preferred_pool:
         preferred_pool = product_pool
 
@@ -182,10 +188,16 @@ async def get_final_recommendations(user_id: int):
     """ Internal GA: Runs 5 generations to find the best 5 products for the user """
     # running the genetic algorithm to find the absolute best products
     profile = get_user_profile(user_id)
+    if "error" in profile: return profile
+    
     product_pool = products_df['product_id'].tolist()
     
     top_category = profile['dna']['top_category']
-    preferred_pool = products_df[products_df['category'] == top_category]['product_id'].tolist() if top_category != "Any" else product_pool
+    if top_category != "any":
+        preferred_pool = products_df[products_df['category'].astype(str).str.strip().str.lower() == top_category]['product_id'].tolist()
+    else:
+        preferred_pool = product_pool
+        
     if not preferred_pool:
         preferred_pool = product_pool
 
@@ -266,6 +278,8 @@ class EvolutionRequest(BaseModel):
 async def evolve_generation(request: EvolutionRequest):
     # creating the next generation by mixing the best products together
     profile = get_user_profile(request.user_id)
+    if "error" in profile: return profile
+    
     product_pool = products_df['product_id'].tolist()
     
     sorted_sets = sorted(request.population_fitness, key=lambda x: x.fitness, reverse=True)
@@ -315,6 +329,7 @@ async def dynamic_card_mutation(user_id: int):
     """ Academic exclusion: Provides a single mutated product that the active user HAS NEVER VIEWED BEFORE """
     # getting a random new product that the user has never seen before
     profile = get_user_profile(user_id)
+    if "error" in profile: return profile
     
     # Exclusion Protocol
     viewed_records = behavior_df[(behavior_df['user_id'] == user_id) & (behavior_df['viewed'] > 0)]['product_id'].tolist()
@@ -340,6 +355,7 @@ async def get_nga_recommendations(user_id: int):
     
     # Retrieve user profile just to include in response payload for UI consistency
     profile = get_user_profile(user_id)
+    if "error" in profile: return profile
     
     return {
         "user_profile": profile,
