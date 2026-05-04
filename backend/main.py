@@ -20,17 +20,17 @@ app.add_middleware(
 BASE_DIR = Path(__file__).resolve().parent
 
 try:
-    # loading all our data from excel files
-    users_df = pd.read_excel(BASE_DIR / 'users.xlsx')
-    products_df = pd.read_excel(BASE_DIR / 'products.xlsx')
-    behavior_df = pd.read_excel(BASE_DIR / 'behavior_15500.xlsx')
+    # loading all our data from csv files
+    users_df = pd.read_csv(BASE_DIR / 'users.csv')
+    products_df = pd.read_csv(BASE_DIR / 'products.csv')
+    behavior_df = pd.read_csv(BASE_DIR / 'behavior_15500.csv')
     
     try:
-        ratings_df = pd.read_excel(BASE_DIR / 'ratings.xlsx')
+        ratings_df = pd.read_csv(BASE_DIR / 'ratings.csv')
     except Exception:
-        print("Note: ratings.xlsx not found, generating mock ratings")
+        print("Note: ratings.csv not found, generating mock ratings")
         ratings_df = pd.DataFrame({'product_id': products_df['product_id'], 'rating': [random.uniform(3.5, 5.0) for _ in range(len(products_df))]})
-    print(" تم تحميل جميع ملفات Excel بنجاح!")
+    print(" تم تحميل جميع ملفات CSV بنجاح!")
 except Exception as e:
     print(f" خطأ فني: لم نتمكن من قراءة الملفات.")
     print(e)
