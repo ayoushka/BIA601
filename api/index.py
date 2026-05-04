@@ -44,9 +44,9 @@ try:
         ratings_df = pd.DataFrame({'product_id': products_df['product_id'], 'rating': [random.uniform(3.5, 5.0) for _ in range(len(products_df))]})
         print(f"Ratings columns (mock): {list(ratings_df.columns)}")
         
-    print(" تم تحميل جميع ملفات CSV بنجاح!")
+    print("Successfully loaded all CSV files!")
 except Exception as e:
-    print(f" خطأ فني: لم نتمكن من قراءة الملفات.")
+    print(f"Technical Error: Could not read data files.")
     print(e)
 
 
