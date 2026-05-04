@@ -143,7 +143,7 @@ def get_user_profile(user_id):
         }
     }
 
-@app.get("/users")
+@app.get("/api/users")
 async def get_users_list():
     """ Provides dynamic user selection for Login Simulation UI """
     # getting a list of all users from the data
@@ -158,7 +158,7 @@ async def get_users_list():
     return {"users": users_list}
 
 
-@app.get("/generation/init/{user_id}")
+@app.get("/api/generation/init/{user_id}")
 async def init_generation(user_id: int):
     """ Initialize Generation 1 mapping 3 Sets of Chromosomes (recommendations) """
     # starting the first generation of products for the user
@@ -197,7 +197,7 @@ async def init_generation(user_id: int):
         "population": sets
     }
 
-@app.get("/recommend/{user_id}")
+@app.get("/api/recommend/{user_id}")
 async def get_final_recommendations(user_id: int):
     """ Internal GA: Runs 5 generations to find the best 5 products for the user """
     # running the genetic algorithm to find the absolute best products
@@ -288,7 +288,7 @@ class EvolutionRequest(BaseModel):
     current_generation: int
     population_fitness: List[SetFitness]
 
-@app.post("/generation/evolve")
+@app.post("/api/generation/evolve")
 async def evolve_generation(request: EvolutionRequest):
     # creating the next generation by mixing the best products together
     profile = get_user_profile(request.user_id)
@@ -338,7 +338,7 @@ async def evolve_generation(request: EvolutionRequest):
         "population": next_gen
     }
 
-@app.get("/mutate/{user_id}")
+@app.get("/api/mutate/{user_id}")
 async def dynamic_card_mutation(user_id: int):
     """ Academic exclusion: Provides a single mutated product that the active user HAS NEVER VIEWED BEFORE """
     # getting a random new product that the user has never seen before
@@ -358,7 +358,7 @@ async def dynamic_card_mutation(user_id: int):
     
     return mutated_card
 
-@app.get("/recommend/nga/{user_id}")
+@app.get("/api/recommend/nga/{user_id}")
 async def get_nga_recommendations(user_id: int):
     """ Non-Genetic Algorithm: Pure random baseline for comparison. """
     product_pool = products_df['product_id'].tolist()
