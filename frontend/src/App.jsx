@@ -30,7 +30,7 @@ function App() {
     const fetchRecommendations = async () => {
       try {
         setLoading(true);
-        const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+        const API_BASE_URL = import.meta.env.PROD ? '' : 'http://localhost:8000';
         const endpoint = algorithmType === 'NGA' 
           ? `/recommend/nga/${activeUserId}` 
           : `/recommend/${activeUserId}`;
@@ -65,7 +65,7 @@ function App() {
   const handleInteraction = useCallback(async (setId, type, actionProduct) => {
       if (type === 'pass') {
           try {
-             const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+             const API_BASE_URL = import.meta.env.PROD ? '' : 'http://localhost:8000';
              const response = await fetch(`${API_BASE_URL}/mutate/${activeUserId}`);
              if (!response.ok) throw new Error('Failed to mutate node');
              const mutatedItem = await response.json();
