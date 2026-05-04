@@ -48,14 +48,6 @@ export default function ProductCard({ product, setId, onInteraction }) {
 
       {/* Top Badges overlay */}
       <div className="absolute top-4 left-4 z-10 flex flex-col gap-2">
-        <div className={`px-3 py-1.5 rounded-full text-xs font-bold shadow-md backdrop-blur-md border border-white/20 inline-flex w-max ${
-          product.fitnessScore > 90 ? 'bg-emerald-500/90 text-white' : 
-          product.fitnessScore > 80 ? 'bg-blue-500/90 text-white' : 
-          'bg-amber-500/90 text-[#0f172a]'
-        }`}>
-          {product.fitnessScore}% Match
-        </div>
-        
         {/* Academic Location Social Proof */}
         {product.trendingBadge && (
            <div className="px-3 py-1.5 rounded-full bg-rose-500/90 text-white text-[10px] font-bold shadow-md backdrop-blur-md border border-white/20 inline-flex items-center gap-1 w-max">
@@ -73,13 +65,17 @@ export default function ProductCard({ product, setId, onInteraction }) {
       </div>
 
       {/* Image container */}
-      <div className="relative h-48 sm:h-56 bg-slate-100 overflow-hidden">
+      <div className="relative aspect-square bg-slate-50 p-4 overflow-hidden flex items-center justify-center">
         <img 
           src={product.image} 
           alt={product.name} 
-          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = "https://placehold.co/600x600/f8fafc/94a3b8?text=Product+Image";
+          }}
+          className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-110"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
       </div>
 
       <div className="p-5 flex flex-col flex-grow">
