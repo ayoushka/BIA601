@@ -8,13 +8,7 @@ import StorePage from './components/StorePage';
 import CartSidebar from './components/CartSidebar';
 import Toast from './components/Toast';
 
-const DUMMY_IMAGES = [
-  'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=600&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1505843490538-5133c6c7d0e1?q=80&w=600&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1593642632823-8f785ba67e45?q=80&w=600&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1595225476474-87563907a212?q=80&w=600&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1497935586351-b67a49e012bf?q=80&w=600&auto=format&fit=crop',
-];
+// Removed static dummy images array
 
 function App() {
   const [activeUserId, setActiveUserId] = useState('');
@@ -37,18 +31,23 @@ function App() {
       try {
         setLoading(true);
         const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
-        // Note: Using the same endpoint for NGA, but you can modify backend later to handle algo param
-        const response = await fetch(`${API_BASE_URL}/recommend/${activeUserId}`);
+        const endpoint = algorithmType === 'NGA' 
+          ? `/recommend/nga/${activeUserId}` 
+          : `/recommend/${activeUserId}`;
+        const response = await fetch(`${API_BASE_URL}${endpoint}`);
         if (!response.ok) throw new Error('Failed to fetch recommendations');
         
         const data = await response.json();
         if (data.user_profile) setUserProfile(data.user_profile);
         
-        // Map images
-        const mappedProducts = data.recommendations.map((item, index) => ({
-             ...item,
-             image: DUMMY_IMAGES[index % DUMMY_IMAGES.length]
-        }));
+        // Map images based on category dynamically from local public folders
+        const mappedProducts = data.recommendations.map((item) => {
+             const normalizedCategory = item.category.toLowerCase().replace(/\s+/g, '');
+             return {
+                 ...item,
+                 image: `/${normalizedCategory}/${item.id}.jpg`
+             };
+        });
         setRecommendations(mappedProducts);
 
       } catch (err) {
@@ -71,9 +70,10 @@ function App() {
              if (!response.ok) throw new Error('Failed to mutate node');
              const mutatedItem = await response.json();
              
+             const normalizedCategory = mutatedItem.category.toLowerCase().replace(/\s+/g, '');
              const newItem = {
                  ...mutatedItem,
-                 image: DUMMY_IMAGES[Math.floor(Math.random() * DUMMY_IMAGES.length)]
+                 image: `/${normalizedCategory}/${mutatedItem.id}.jpg`
              };
 
              setRecommendations(prev => prev.map(p => p.id === actionProduct.id ? newItem : p));

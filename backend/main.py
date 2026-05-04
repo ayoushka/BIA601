@@ -5,6 +5,7 @@ import random
 from typing import List, Dict, Any
 import numpy as np
 from pydantic import BaseModel
+from pathlib import Path
 
 # setting up the main app for the api
 app = FastAPI()
@@ -16,14 +17,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+BASE_DIR = Path(__file__).parent
+
 try:
     # loading all our data from excel files
-    users_df = pd.read_excel('users.xlsx')
-    products_df = pd.read_excel('products.xlsx')
-    behavior_df = pd.read_excel('behavior_15500.xlsx')
+    users_df = pd.read_excel(BASE_DIR / 'users.xlsx')
+    products_df = pd.read_excel(BASE_DIR / 'products.xlsx')
+    behavior_df = pd.read_excel(BASE_DIR / 'behavior_15500.xlsx')
     
     try:
-        ratings_df = pd.read_excel('ratings.xlsx')
+        ratings_df = pd.read_excel(BASE_DIR / 'ratings.xlsx')
     except Exception:
         print("Note: ratings.xlsx not found, generating mock ratings")
         ratings_df = pd.DataFrame({'product_id': products_df['product_id'], 'rating': [random.uniform(3.5, 5.0) for _ in range(len(products_df))]})
@@ -36,14 +39,20 @@ except Exception as e:
 def generate_rich_product_card(pid, user_id=None, force_mutation=False, target_location="Unknown"):
     # calculating the product score based on purchases, clicks and views
     # Target Academic Formula: (Purchased x10, Clicked x5, Viewed x1) + Average Rating
-    global_purchases = behavior_df[behavior_df['product_id'] == pid]['purchased'].sum()
-    global_clicks = behavior_df[behavior_df['product_id'] == pid]['clicked'].sum()
-    global_views = behavior_df[behavior_df['product_id'] == pid]['viewed'].sum()
+    if user_id:
+        user_history = behavior_df[(behavior_df['user_id'] == user_id) & (behavior_df['product_id'] == pid)]
+        purchases = user_history['purchased'].sum()
+        clicks = user_history['clicked'].sum()
+        views = user_history['viewed'].sum()
+    else:
+        purchases = behavior_df[behavior_df['product_id'] == pid]['purchased'].sum()
+        clicks = behavior_df[behavior_df['product_id'] == pid]['clicked'].sum()
+        views = behavior_df[behavior_df['product_id'] == pid]['viewed'].sum()
     
     ratings_series = ratings_df[ratings_df['product_id'] == pid]['rating']
     avg_rating = float(ratings_series.mean()) if not ratings_series.empty and not pd.isna(ratings_series.mean()) else random.uniform(4.0, 5.0)
     
-    fitness = int((global_purchases * 10) + (global_clicks * 5) + (global_views * 1) + avg_rating)
+    fitness = int((purchases * 10) + (clicks * 5) + (views * 1) + avg_rating)
     if fitness == 0: fitness = random.randint(30, 95) # Fallback for no-data items to prevent UI dead zones
 
     user_insight = False
@@ -81,8 +90,7 @@ def get_user_profile(user_id):
     # getting the user information and what they like to buy
     user_data = users_df[users_df['user_id'] == user_id]
     if user_data.empty:
-        user_id = int(users_df['user_id'].iloc[0])
-        user_data = users_df[users_df['user_id'] == user_id]
+        raise HTTPException(status_code=404, detail="User not found")
         
     user_history = behavior_df[behavior_df['user_id'] == user_id]
     total_purchases = int(user_history['purchased'].sum()) if not user_history.empty else 0
@@ -143,11 +151,24 @@ async def init_generation(user_id: int):
     profile = get_user_profile(user_id)
     product_pool = products_df['product_id'].tolist()
     
+    top_category = profile['dna']['top_category']
+    preferred_pool = products_df[products_df['category'] == top_category]['product_id'].tolist() if top_category != "Any" else product_pool
+    if not preferred_pool:
+        preferred_pool = product_pool
+
+    def get_initial_sample():
+        sample = random.sample(preferred_pool, min(5, len(preferred_pool)))
+        while len(sample) < 5:
+            p = random.choice(product_pool)
+            if p not in sample:
+                sample.append(p)
+        return sample
+    
     # Generate 3 robust Sets representing our initial population based on User Profile location
     sets = [
-        {"setId": "Alpha", "products": [generate_rich_product_card(pid, user_id, False, profile['country']) for pid in random.sample(product_pool, 5)]},
-        {"setId": "Beta", "products": [generate_rich_product_card(pid, user_id, False, profile['country']) for pid in random.sample(product_pool, 5)]},
-        {"setId": "Gamma", "products": [generate_rich_product_card(pid, user_id, False, profile['country']) for pid in random.sample(product_pool, 5)]}
+        {"setId": "Alpha", "products": [generate_rich_product_card(pid, user_id, False, profile['country']) for pid in get_initial_sample()]},
+        {"setId": "Beta", "products": [generate_rich_product_card(pid, user_id, False, profile['country']) for pid in get_initial_sample()]},
+        {"setId": "Gamma", "products": [generate_rich_product_card(pid, user_id, False, profile['country']) for pid in get_initial_sample()]}
     ]
 
     return {
@@ -163,8 +184,21 @@ async def get_final_recommendations(user_id: int):
     profile = get_user_profile(user_id)
     product_pool = products_df['product_id'].tolist()
     
+    top_category = profile['dna']['top_category']
+    preferred_pool = products_df[products_df['category'] == top_category]['product_id'].tolist() if top_category != "Any" else product_pool
+    if not preferred_pool:
+        preferred_pool = product_pool
+
+    def get_initial_sample():
+        sample = random.sample(preferred_pool, min(5, len(preferred_pool)))
+        while len(sample) < 5:
+            p = random.choice(product_pool)
+            if p not in sample:
+                sample.append(p)
+        return sample
+    
     # 1. Initialize Population (5 chromosomes, each has 5 product genes)
-    population = [random.sample(product_pool, 5) for _ in range(5)]
+    population = [get_initial_sample() for _ in range(5)]
     
     for gen in range(5):
         # 2. Evaluate Fitness for each chromosome (sum of individual product fitness)
@@ -184,10 +218,15 @@ async def get_final_recommendations(user_id: int):
         for _ in range(3):
             # Crossover
             split = random.randint(1, 4)
-            child = list(set(parent1[:split] + parent2[split:]))
+            child = parent1[:split]
+            for gene in parent2[split:]:
+                if gene not in child:
+                    child.append(gene)
             # Fill if too short
             while len(child) < 5:
-                child.append(random.choice(product_pool))
+                new_gene = random.choice(product_pool)
+                if new_gene not in child:
+                    child.append(new_gene)
             # Mutation (10% chance)
             if random.random() < 0.1:
                 child[random.randint(0, 4)] = random.choice(product_pool)
@@ -236,10 +275,24 @@ async def evolve_generation(request: EvolutionRequest):
     p1_genes = parent_1.product_ids if parent_1 and parent_1.fitness > 0 else random.sample(product_pool, 5)
     p2_genes = parent_2.product_ids if parent_2 and parent_2.fitness > 0 else random.sample(product_pool, 5)
 
-    alpha_genes = list(set(p1_genes[:3] + p2_genes[:3]))[:5]
-    if len(alpha_genes) < 5: alpha_genes += random.sample(product_pool, 5 - len(alpha_genes))
+    alpha_genes = p1_genes[:3]
+    for gene in p2_genes[:3]:
+        if gene not in alpha_genes and len(alpha_genes) < 5:
+            alpha_genes.append(gene)
+    while len(alpha_genes) < 5:
+        new_gene = random.choice(product_pool)
+        if new_gene not in alpha_genes:
+            alpha_genes.append(new_gene)
 
-    beta_genes = list(set(p1_genes[-2:] + p2_genes[-3:]))[:4]
+    beta_genes = p1_genes[-2:]
+    for gene in p2_genes[-3:]:
+        if gene not in beta_genes and len(beta_genes) < 4:
+            beta_genes.append(gene)
+    while len(beta_genes) < 4:
+        new_gene = random.choice(product_pool)
+        if new_gene not in beta_genes:
+            beta_genes.append(new_gene)
+            
     mutated_gene = random.choice([p for p in product_pool if p not in p1_genes and p not in p2_genes])
     beta_genes.append(mutated_gene)
 
@@ -275,6 +328,23 @@ async def dynamic_card_mutation(user_id: int):
     mutated_card = generate_rich_product_card(mutated_pid, user_id, force_mutation=True, target_location=profile['country'])
     
     return mutated_card
+
+@app.get("/recommend/nga/{user_id}")
+async def get_nga_recommendations(user_id: int):
+    """ Non-Genetic Algorithm: Pure random baseline for comparison. """
+    product_pool = products_df['product_id'].tolist()
+    random_products = random.sample(product_pool, 5)
+    
+    # Use user_id=None and target_location="Unknown" to ensure no personalization is applied
+    baseline_cards = [generate_rich_product_card(pid, user_id=None, force_mutation=False, target_location="Unknown") for pid in random_products]
+    
+    # Retrieve user profile just to include in response payload for UI consistency
+    profile = get_user_profile(user_id)
+    
+    return {
+        "user_profile": profile,
+        "recommendations": baseline_cards
+    }
 
 if __name__ == "__main__":
     import uvicorn
