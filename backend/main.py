@@ -20,17 +20,31 @@ app.add_middleware(
 BASE_DIR = Path(__file__).resolve().parent
 
 try:
-    # loading all our data from excel files
-    users_df = pd.read_excel(BASE_DIR / 'users.xlsx')
-    products_df = pd.read_excel(BASE_DIR / 'products.xlsx')
-    behavior_df = pd.read_excel(BASE_DIR / 'behavior_15500.xlsx')
+    # loading all our data from csv files with robust parsing
+    csv_kwargs = {'sep': None, 'engine': 'python', 'encoding': 'utf-8-sig'}
+    
+    users_df = pd.read_csv(BASE_DIR / 'users.csv', **csv_kwargs)
+    users_df.columns = users_df.columns.str.strip()
+    print(f"Users columns: {list(users_df.columns)}")
+    
+    products_df = pd.read_csv(BASE_DIR / 'products.csv', **csv_kwargs)
+    products_df.columns = products_df.columns.str.strip()
+    print(f"Products columns: {list(products_df.columns)}")
+    
+    behavior_df = pd.read_csv(BASE_DIR / 'behavior_15500.csv', **csv_kwargs)
+    behavior_df.columns = behavior_df.columns.str.strip()
+    print(f"Behavior columns: {list(behavior_df.columns)}")
     
     try:
-        ratings_df = pd.read_excel(BASE_DIR / 'ratings.xlsx')
+        ratings_df = pd.read_csv(BASE_DIR / 'ratings.csv', **csv_kwargs)
+        ratings_df.columns = ratings_df.columns.str.strip()
+        print(f"Ratings columns: {list(ratings_df.columns)}")
     except Exception:
-        print("Note: ratings.xlsx not found, generating mock ratings")
+        print("Note: ratings.csv not found, generating mock ratings")
         ratings_df = pd.DataFrame({'product_id': products_df['product_id'], 'rating': [random.uniform(3.5, 5.0) for _ in range(len(products_df))]})
-    print(" تم تحميل جميع ملفات Excel بنجاح!")
+        print(f"Ratings columns (mock): {list(ratings_df.columns)}")
+        
+    print(" تم تحميل جميع ملفات CSV بنجاح!")
 except Exception as e:
     print(f" خطأ فني: لم نتمكن من قراءة الملفات.")
     print(e)
