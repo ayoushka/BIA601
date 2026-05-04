@@ -3,9 +3,9 @@
 
 > مشروع BIA601 – الخوارزميات الذكية | الفصل الدراسي S25
 
-[![GitHub repo](https://github.com/ayoushka/BIA601)](https://github.com/ayoushka/BIA601)
+[![GitHub repo](https://img.shields.io/badge/GitHub-Repository-black?logo=github)](https://github.com/ayoushka/BIA601)
 [![Demo](https://img.shields.io/badge/Demo-Live-green?logo=netlify)](https://bia601.vercel.app/)
-[![Video](https://img.shields.io/badge/Video-3%20minutes-red?logo=youtube)](#)
+[![Video](https://img.shields.io/badge/Video-3%20minutes-red?logo=youtube)](https://drive.google.com/file/d/1i9PVoDBsoY7l6SMyc-K7oTNok6eELgMM/view?usp=sharing)
 
 ---
 
