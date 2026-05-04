@@ -11,8 +11,17 @@ import Toast from './components/Toast';
 // Removed static dummy images array
 
 function App() {
-  const [activeUserId, setActiveUserId] = useState('');
-  const [algorithmType, setAlgorithmType] = useState('GA'); // 'GA' or 'NGA'
+  const [activeUserId, setActiveUserId] = useState(() => {
+    return localStorage.getItem('activeUserId') || '';
+  });
+  const [algorithmType, setAlgorithmType] = useState(() => {
+    return localStorage.getItem('algorithmType') || 'GA';
+  });
+  
+  useEffect(() => {
+    if (activeUserId) localStorage.setItem('activeUserId', activeUserId);
+    if (algorithmType) localStorage.setItem('algorithmType', algorithmType);
+  }, [activeUserId, algorithmType]);
   
   // Recommendations State
   const [recommendations, setRecommendations] = useState([]);
@@ -28,6 +37,7 @@ function App() {
   // Init Recommendations only when on /store route
   useEffect(() => {
     const fetchRecommendations = async () => {
+      if (!activeUserId) return;
       try {
         setLoading(true);
         const API_BASE_URL = import.meta.env.PROD ? '' : 'http://localhost:8000';
