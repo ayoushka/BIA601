@@ -65,6 +65,170 @@ BIA601_Project/
 
 ---
 
+## بنية النظام
+ System Architecture
+
+This section explains the system architecture in a clear and structured way.
+
+---
+
+🔹 1. User Flow
+
+flowchart LR
+    User([ User]) --> Landing[ Landing Page]
+    Landing --> Selection[ Selection Page]
+    Selection --> Store[ Store Page]
+
+---
+
+🔹 2. API Interaction
+
+flowchart LR
+
+    Store[ Store Page]
+
+    subgraph APIs
+        U[ Users API]
+        I[ Init API]
+        GA[ GA API]
+        NGA[ Next GA API]
+        M[ Mutate API]
+        E[ Evolve API]
+    end
+
+    Server[ Backend Server]
+
+    Store --> U
+    Store --> I
+    Store --> GA
+    Store --> NGA
+    Store --> M
+    Store --> E
+
+    U --> Server
+    I --> Server
+    GA --> Server
+    NGA --> Server
+    M --> Server
+    E --> Server
+
+---
+
+🔹 3. Data Layer
+
+flowchart LR
+
+    Server[ Backend Server]
+
+    subgraph Databases
+        Users[( Users DB)]
+        Products[( Products DB)]
+        Ratings[( Ratings DB)]
+        Behavior[( Behavior DB)]
+    end
+
+    Server --> Users
+    Server --> Products
+    Server --> Ratings
+    Server --> Behavior
+
+---
+
+🔹 4. Images Handling
+
+flowchart LR
+
+    Store[ Store Page]
+    GA[ GA API]
+    Images[( Images Storage)]
+
+    GA -->|serve via /images/| Images
+    Store -->|load images| Images
+
+---
+
+📌 Summary
+
+- The system is divided into clear layers:
+  
+  - Frontend (User Interface)
+  - API Services
+  - Backend Logic
+  - Data Storage
+  - Assets Handling
+
+- This separation improves:
+  
+  - Maintainability
+  - Scalability
+  - Readabilityهذا الملف الشارح
+
+---
+
+## المخطط الصندوقي
+```mermaid
+flowchart TB
+
+%% ===== Frontend =====
+subgraph Frontend
+    User --> LandingPage --> SelectionPage --> StorePage
+end
+
+%% ===== APIs =====
+subgraph APIs
+    API_Users
+    API_Init
+    API_GA
+    API_NGA
+    API_Mutate
+    API_Evolve
+end
+
+%% ===== Backend =====
+subgraph Backend
+    Server[Backend Server]
+end
+
+%% ===== Databases =====
+subgraph Databases
+    UsersDB
+    ProductsDB
+    RatingsDB
+    BehaviorDB
+end
+
+%% ===== Assets =====
+subgraph Assets
+    Images
+end
+
+%% ===== Clean Connections =====
+StorePage --> API_Users
+StorePage --> API_Init
+StorePage --> API_GA
+StorePage --> API_NGA
+StorePage --> API_Mutate
+StorePage --> API_Evolve
+
+API_Users --> Server
+API_Init --> Server
+API_GA --> Server
+API_NGA --> Server
+API_Mutate --> Server
+API_Evolve --> Server
+
+Server --> UsersDB
+Server --> ProductsDB
+Server --> RatingsDB
+Server --> BehaviorDB
+
+API_GA --> Images
+StorePage --> Images
+```
+
+
+---
+
 ## التقنيات المستخدمة
 
 | المجال | الأدوات والمكتبات |
